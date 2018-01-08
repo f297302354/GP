@@ -51,6 +51,9 @@
 		<!-- servlet -->
 		<javax.servlet.version>3.0.1</javax.servlet.version>
 
+		<!-- mysql 链接驱动包 -->
+		<java.mysql.connection>5.1.38</java.mysql.connection>
+
 	</properties>
 
 	<!-- 设定主仓库，按设定顺序进行查找 -->
@@ -262,6 +265,21 @@
 			<version>${druid.version}</version>
 		</dependency>
 		<!-- 连接池 end -->
+
+		<!-- javax 注解 -->
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>jsr250-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<!-- mysql 连接驱动包 start -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${java.mysql.connection}</version>
+		</dependency>
+		<!-- mysql 连接驱动包 end -->
 	</dependencies>
 
 	<build>
