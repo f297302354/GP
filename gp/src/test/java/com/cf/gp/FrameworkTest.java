@@ -9,6 +9,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.cf.gp.model.TestModel;
 import com.cf.gp.service.TestInterface;
 
+
 public class FrameworkTest {
 
 	private ClassPathXmlApplicationContext app;
