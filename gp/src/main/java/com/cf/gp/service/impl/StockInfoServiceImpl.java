@@ -35,7 +35,9 @@ public class StockInfoServiceImpl implements StockInfoService {
 	
 	private static final String SZ_FLAG = "1";
 	
-
+	/**
+	 * 根据事实的股票数据把获取的所有股票插入到股票基础信息表中，只执行一次就行了，未来新股的增量部分还没有考虑进去
+	 */
 	@SuppressWarnings("finally")
 	@Transactional
 	public boolean queryInfoWithInsertDB() {
