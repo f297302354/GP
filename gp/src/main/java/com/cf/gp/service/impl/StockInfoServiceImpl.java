@@ -80,7 +80,7 @@ public class StockInfoServiceImpl implements StockInfoService {
 			return resultFlag;
 		}
 	}
-
+	
 	@Override
 	public List<StockInfo> selectAll() {
 		return stockInfoMapper.selectAll();
