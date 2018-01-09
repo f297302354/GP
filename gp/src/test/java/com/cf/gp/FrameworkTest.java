@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.cf.gp.service.TestInterface;
-
 
 public class FrameworkTest {
 
@@ -18,7 +16,7 @@ public class FrameworkTest {
 	
 	@Test
 	public void test() {
-		TestInterface bean = (TestInterface)app.getBean("testService");
+//		TestInterface bean = (TestInterface)app.getBean("testService");
 	}
 	
 }
