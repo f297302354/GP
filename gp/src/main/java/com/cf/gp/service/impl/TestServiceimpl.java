@@ -18,5 +18,5 @@ public class TestServiceimpl implements TestInterface {
 	public List<TestModel> queryModel() {
 		return testMapper.queryModel();
 	}
-
+	
 }
