@@ -22,8 +22,9 @@ public class HttpClientTest {
 		/**
 		 * https://www.zhihu.com/question/22145919
 		 * 新浪的PE为静态PE，PB数据也不是很准确，在股票发生除权时未能进行修正
-		 * http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=100&sort=symbol&asc=1&node=hs_a&symbol=&_s_r_a=init
-		 * http://q.stock.sohu.com/hisHq?code=zs_000001&start=20000504&end=20151215&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp&r=0.8391495715053367&0.9677250558488026
+		 * 实时：http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=100&sort=symbol&asc=1&node=hs_a&symbol=&_s_r_a=init
+		 * 指数历史：http://q.stock.sohu.com/hisHq?code=zs_000001&start=20000504&end=20151215&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp&r=0.8391495715053367&0.9677250558488026
+		 * 个股历史：http://q.stock.sohu.com/hisHq?code=cn_601989&start=20180101&end=20180109&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp&r=0.8391495715053367&0.9677250558488026
 		 */
 		
 		/**
