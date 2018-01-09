@@ -1,9 +1,12 @@
 package com.cf.gp;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.cf.gp.model.StockInfo;
 import com.cf.gp.service.StockInfoService;
 
 public class StockInfoTest {
@@ -15,7 +18,7 @@ public class StockInfoTest {
 		app = new ClassPathXmlApplicationContext(new String[]{"spring/spring.xml","mybatis/spring-mybatis.xml"});
 	}
 	
-	@Test
+//	@Test
 	public void queryInfoWithInsertDB() {
 		//第一次 exec time = 27147 - 3411条记录
 		long start = System.currentTimeMillis();
@@ -24,6 +27,13 @@ public class StockInfoTest {
 		long end = System.currentTimeMillis();
 		System.out.println(result);
 		System.out.println("exec time = " + String.valueOf(end - start));
+	}
+	
+	@Test
+	public void selectAll() {
+		StockInfoService stockInfoService = (StockInfoService)app.getBean("stockInfoService");
+		List<StockInfo> selectAll = stockInfoService.selectAll();
+		System.out.println(selectAll.size());
 	}
 	
 }

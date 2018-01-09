@@ -1,5 +1,7 @@
 package com.cf.gp.dao;
 
+import java.util.List;
+
 import com.cf.gp.model.StockInfo;
 
 public interface StockInfoMapper {
@@ -50,4 +52,6 @@ public interface StockInfoMapper {
      * @mbggenerated Tue Jan 09 10:51:53 CST 2018
      */
     int updateByPrimaryKey(StockInfo record);
+    
+    List<StockInfo> selectAll();
 }

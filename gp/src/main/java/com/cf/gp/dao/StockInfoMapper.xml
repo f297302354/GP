@@ -150,4 +150,10 @@
 		where ID = #{id,jdbcType=INTEGER}
 	</update>
 	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_stock_info
+	</select>
+	
 </mapper>
