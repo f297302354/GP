@@ -35,16 +35,17 @@ public class HttpClientTest {
 		 * http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=CT&cmd=C._SZAME&sty=FCOIATA&sortType=C&sortRule=-1&page=1&pageSize=20&js=var%20quote_123%3d{rank:[(x)],pages:(pc)}&token=7bc05d0d4c3c22ef9fca8c2a912d779c&jsName=quote_123&_g=0.13736001542082255
 		 */
 		CloseableHttpClient client = HttpClients.createDefault();
-		HttpGet get = new HttpGet("http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=10&sort=symbol&asc=1&node=hs_a&symbol=&_s_r_a=init");
+		HttpGet get = new HttpGet("http://q.stock.sohu.com/hisHq?code=cn_601989&start=20180101&end=20180109&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp&r=0.8391495715053367&0.9677250558488026");
 		CloseableHttpResponse resp = client.execute(get);
 		HttpEntity entity = resp.getEntity();
 		String result = EntityUtils.toString(entity);
-		
-		List<StockTranformVo> list = JSON.parseArray(result, StockTranformVo.class);
-		
-		
-		System.out.println(list.size());
+		System.out.println(result);
+		String substring = result.substring(result.indexOf("\"hq\":[")+"\"hq\":[".length(), result.indexOf("],\"code\""));
+		String[] split = substring.replace("],", "").replace("]", "").replace("\"", "").substring(1).replace("[", "@").split("@");
+		System.out.println(split);
 	}
+	
+	
 	
 	@Test
 	public void aa() {
