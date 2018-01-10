@@ -31,6 +31,8 @@ public class StockYesServiceImpl implements StockYesService {
 	
 	private static final String START_CODE = "300";
 	
+	private static final int AVG_14 = 14;
+	
 	private static final int AVG_25 = 25;
 	
 	private static final int AVG_99 = 99;
@@ -55,8 +57,13 @@ public class StockYesServiceImpl implements StockYesService {
 							double val99 = stockPriceHistoryService.queryAvgValue(param);
 							param.setDayAvg(AVG_25);
 							double val25 = stockPriceHistoryService.queryAvgValue(param);
+							param.setDayAvg(AVG_14);
+							double val14 = stockPriceHistoryService.queryAvgValue(param);
 							StockPriceHistory current = stockPriceHistoryService.selectByDate(param);
-							if (current.getsPrice().doubleValue() >= val25 && current.getsPrice().doubleValue() < val99) {
+							//TODO:注意条件
+//							if (current.getsPrice().doubleValue() >= val25 && current.getsPrice().doubleValue() < val99) {//大于等于25日均线并且小于99日均线
+//							if (current.getsPrice().doubleValue() == val25) {//等于25日均线的收盘价
+							if (current.getsPrice().doubleValue() >= val14 && current.getsPrice().doubleValue() <= val25) {//大于等于14日均线并且小于等于25日均线
 								StockYes y = new StockYes();
 								y.setsCode(stockInfo.getsCode());
 								y.setsName(stockInfo.getsName());

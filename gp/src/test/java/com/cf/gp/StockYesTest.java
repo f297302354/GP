@@ -21,7 +21,7 @@ public class StockYesTest {
 		//第二次 exec time = 11596（11秒） 只加了一个code的索引列
 		long start = System.currentTimeMillis();
 		StockYesService stockYesService = (StockYesService)app.getBean("stockYesService");
-		boolean result = stockYesService.execYes("2018-01-09");
+		boolean result = stockYesService.execYes("2018-01-10");
 		long end = System.currentTimeMillis();
 		System.out.println(result);
 		System.out.println("exec time = " + String.valueOf(end - start));
