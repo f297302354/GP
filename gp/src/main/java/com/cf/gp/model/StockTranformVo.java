@@ -7,6 +7,8 @@ public class StockTranformVo {
 	private String code;
 	
 	private String name;
+	
+	private double trade;
 
 	public String getSymbol() {
 		return symbol;
@@ -30,6 +32,14 @@ public class StockTranformVo {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public double getTrade() {
+		return trade;
+	}
+
+	public void setTrade(double trade) {
+		this.trade = trade;
 	}
 	
 }

@@ -50,4 +50,5 @@ public interface StockYesMapper {
      * @mbggenerated Tue Jan 09 14:17:56 CST 2018
      */
     int updateByPrimaryKey(StockYes record);
+    
 }

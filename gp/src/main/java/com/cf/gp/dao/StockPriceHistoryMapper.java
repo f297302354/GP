@@ -1,6 +1,7 @@
 package com.cf.gp.dao;
 
 import com.cf.gp.model.StockPriceHistory;
+import com.cf.gp.model.StockPriceHistoryParamVo;
 
 public interface StockPriceHistoryMapper {
     /**
@@ -50,4 +51,11 @@ public interface StockPriceHistoryMapper {
      * @mbggenerated Tue Jan 09 14:17:07 CST 2018
      */
     int updateByPrimaryKey(StockPriceHistory record);
+    
+    double queryAvgValue(StockPriceHistoryParamVo vo);
+    
+    int queryAvgValueCount(StockPriceHistoryParamVo vo);
+    
+    StockPriceHistory selectByDate(StockPriceHistoryParamVo vo);
+    
 }
