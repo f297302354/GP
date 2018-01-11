@@ -56,7 +56,7 @@ public class StockPriceHistoryTest {
 	@Test
 	public void queryDataWithInsertDB() {
 		//第一次 exec time = 31160 - 3411条记录 （30多次http）
-		//第二次 exec time = 40016 - 3410条记录 （30多次http） 36页  38次请求
+		//第二次 exec time = 40016 - 3410条记录 （30多次http） 36页  38次请求 - 2018-01-11
 		long start = System.currentTimeMillis();
 		StockPriceHistoryService stockPriceHistoryService = (StockPriceHistoryService)app.getBean("stockPriceHistoryService");
 		boolean result = stockPriceHistoryService.queryDataWithInsertDB();
