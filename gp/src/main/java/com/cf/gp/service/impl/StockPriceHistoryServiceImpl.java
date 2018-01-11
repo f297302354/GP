@@ -138,6 +138,8 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 						startPage++;
 					}
 				}
+				System.out.println(">>>>>>>>>>>>>>>>>>>>>    " + startPage);
+				System.out.println(result);
 			}
 			resultFlag = true;
 		} catch (Exception e) {
