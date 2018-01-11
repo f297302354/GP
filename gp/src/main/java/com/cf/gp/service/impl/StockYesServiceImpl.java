@@ -37,6 +37,8 @@ public class StockYesServiceImpl implements StockYesService {
 	
 	private static final int AVG_99 = 99;
 	
+	private static final double DIFF_VAL = 0.01;//相差1分钱
+	
 	@SuppressWarnings("finally")
 	@Transactional
 	public boolean execYes(String date) {
@@ -62,8 +64,8 @@ public class StockYesServiceImpl implements StockYesService {
 							StockPriceHistory current = stockPriceHistoryService.selectByDate(param);
 							//TODO:注意条件
 //							if (current.getsPrice().doubleValue() >= val25 && current.getsPrice().doubleValue() < val99) {//大于等于25日均线并且小于99日均线
-//							if (current.getsPrice().doubleValue() == val25) {//等于25日均线的收盘价
-							if (current.getsPrice().doubleValue() >= val14 && current.getsPrice().doubleValue() <= val25) {//大于等于14日均线并且小于等于25日均线
+							if (current.getsPrice().doubleValue() >= (val25 - DIFF_VAL) &&  current.getsPrice().doubleValue() <= (val25 + DIFF_VAL)) {//等于25日均线的收盘价(前后误差值为：DIFF_VAL变量)
+//							if (current.getsPrice().doubleValue() >= val14 && current.getsPrice().doubleValue() <= val25) {//大于等于14日均线并且小于等于25日均线
 								StockYes y = new StockYes();
 								y.setsCode(stockInfo.getsCode());
 								y.setsName(stockInfo.getsName());

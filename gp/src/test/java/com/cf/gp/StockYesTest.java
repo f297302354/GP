@@ -18,10 +18,11 @@ public class StockYesTest {
 	@Test
 	public void queryInfoWithInsertDB() {
 		//第一次 exec time = 3134509（52分钟） - 太慢了
-		//第二次 exec time = 11596（11秒） 只加了一个code的索引列
+		//第二次 exec time = 11596（11秒） 只加了一个code的索引列 50多万的数据
+		//第三次 exec time = 24698 加了code_name_date的复合的索引列 100万的数据
 		long start = System.currentTimeMillis();
 		StockYesService stockYesService = (StockYesService)app.getBean("stockYesService");
-		boolean result = stockYesService.execYes("2018-01-10");
+		boolean result = stockYesService.execYes("2018-01-11");
 		long end = System.currentTimeMillis();
 		System.out.println(result);
 		System.out.println("exec time = " + String.valueOf(end - start));
