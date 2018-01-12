@@ -22,7 +22,7 @@ public class StockYesTest {
 		//第三次 exec time = 24698 加了code_name_date的复合的索引列 100万的数据
 		long start = System.currentTimeMillis();
 		StockYesService stockYesService = (StockYesService)app.getBean("stockYesService");
-		boolean result = stockYesService.execYes("2018-01-11");
+		boolean result = stockYesService.execYes("2018-01-12");
 		long end = System.currentTimeMillis();
 		System.out.println(result);
 		System.out.println("exec time = " + String.valueOf(end - start));

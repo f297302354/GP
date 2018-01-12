@@ -9,6 +9,8 @@ public class StockTranformVo {
 	private String name;
 	
 	private double trade;
+	
+	private double open;
 
 	public String getSymbol() {
 		return symbol;
@@ -40,6 +42,14 @@ public class StockTranformVo {
 
 	public void setTrade(double trade) {
 		this.trade = trade;
+	}
+
+	public double getOpen() {
+		return open;
+	}
+
+	public void setOpen(double open) {
+		this.open = open;
 	}
 	
 }

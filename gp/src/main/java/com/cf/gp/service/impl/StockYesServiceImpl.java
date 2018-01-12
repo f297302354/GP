@@ -37,9 +37,13 @@ public class StockYesServiceImpl implements StockYesService {
 	
 	private static final int AVG_99 = 99;
 	
-	private static final double DIFF_VAL = 0.01;//相差1分钱
+	private static final int AVG_144 = 144;
 	
-	@SuppressWarnings("finally")
+	private static final int AVG_165 = 165;
+	
+	private static final double DIFF_VAL = 0.03;//相差1分钱
+	
+	/*@SuppressWarnings("finally")
 	@Transactional
 	public boolean execYes(String date) {
 		boolean resultFlag = false;
@@ -64,8 +68,59 @@ public class StockYesServiceImpl implements StockYesService {
 							StockPriceHistory current = stockPriceHistoryService.selectByDate(param);
 							//TODO:注意条件
 //							if (current.getsPrice().doubleValue() >= val25 && current.getsPrice().doubleValue() < val99) {//大于等于25日均线并且小于99日均线
-							if (current.getsPrice().doubleValue() >= (val25 - DIFF_VAL) &&  current.getsPrice().doubleValue() <= (val25 + DIFF_VAL)) {//等于25日均线的收盘价(前后误差值为：DIFF_VAL变量)
+							if (current.getsPrice().doubleValue() >= val25 &&  current.getsPrice().doubleValue() <= (val25 + DIFF_VAL)) {
+//								if (current.getsPrice().doubleValue() >= (val25 - DIFF_VAL) &&  current.getsPrice().doubleValue() <= (val25 + DIFF_VAL)) {//等于25日均线的收盘价(前后误差值为：DIFF_VAL变量)
 //							if (current.getsPrice().doubleValue() >= val14 && current.getsPrice().doubleValue() <= val25) {//大于等于14日均线并且小于等于25日均线
+								StockYes y = new StockYes();
+								y.setsCode(stockInfo.getsCode());
+								y.setsName(stockInfo.getsName());
+								y.setsDate(parseDate);
+								stockYesMapper.insert(y);
+							}
+						}
+					} catch (Exception e) {
+						continue;
+					}
+				}
+			}
+			resultFlag = true;
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		} finally {
+			return resultFlag;
+		}
+	}*/
+	
+	/**
+	 * 考虑的是144 165天的数据
+	 */
+	@SuppressWarnings("finally")
+	@Transactional
+	public boolean execYes(String date) {
+		boolean resultFlag = false;
+		try {
+			Date parseDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			List<StockInfo> selectAll = stockInfoService.selectAll();
+			StockPriceHistoryParamVo param = null;
+			for (int i = 0; i < selectAll.size(); i++) {
+				StockInfo stockInfo = selectAll.get(i);
+				if (stockInfo.getsCode().indexOf(START_CODE) != 0 ) {//创业板暂时不考虑
+					try {
+						param = new StockPriceHistoryParamVo();
+						param.setCode(stockInfo.getsCode());
+						param.setDate(date);
+						param.setDayAvg(AVG_165);
+						if (stockPriceHistoryService.queryAvgValueCount(param) == AVG_165) {//如果有165天的值就可以算165天均值
+							double val165 = stockPriceHistoryService.queryAvgValue(param);
+							param.setDayAvg(AVG_144);
+							double val144 = stockPriceHistoryService.queryAvgValue(param);
+							StockPriceHistory current = stockPriceHistoryService.selectByDate(param);
+							//TODO:注意条件
+							if (
+									(current.getsPrice().doubleValue() >= val165 &&  current.getsPrice().doubleValue() <= (val165 + DIFF_VAL)) //165
+										|| 
+									(current.getsPrice().doubleValue() >= val144 &&  current.getsPrice().doubleValue() <= (val144 + DIFF_VAL)) //144
+										) {//165线上3分波动
 								StockYes y = new StockYes();
 								y.setsCode(stockInfo.getsCode());
 								y.setsName(stockInfo.getsName());

@@ -44,7 +44,7 @@ public class StockPriceHistoryTest {
 		//第三次 exec time = 514094 - 650525条记录 （20160501 - 20170430）
 		long start = System.currentTimeMillis();
 		StockPriceHistoryService stockPriceHistoryService = (StockPriceHistoryService)app.getBean("stockPriceHistoryService");
-		boolean result = stockPriceHistoryService.queryHistoryDataWithInsertDB("20160501", "20170430");
+		boolean result = stockPriceHistoryService.queryHistoryDataWithInsertDB("20180110", "20180111");
 		long end = System.currentTimeMillis();
 		System.out.println(result);
 		System.out.println("exec time = " + String.valueOf(end - start));

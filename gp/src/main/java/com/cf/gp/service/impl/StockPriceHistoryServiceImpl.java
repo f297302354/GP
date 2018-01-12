@@ -55,6 +55,7 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 		try {
 			List<StockInfo> selectAll = stockInfoService.selectAll();
 			for (int i = 0; i < selectAll.size(); i++) {
+				System.out.println("----------------  " + i);
 				StockInfo stockInfo = selectAll.get(i);
 				HttpGet get = new HttpGet(url.replace(STOCK_CODE, stockInfo.getsCode()));
 				CloseableHttpResponse resp = client.execute(get);
@@ -123,12 +124,14 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 							List<StockTranformVo> resultList = JSON.parseArray(result, StockTranformVo.class);
 							for (int i = 0; i < resultList.size(); i++) {
 								StockTranformVo stockTranformVo = resultList.get(i);
-								StockPriceHistory his = new StockPriceHistory();
-								his.setsCode(stockTranformVo.getCode());
-								his.setsName(stockTranformVo.getName());
-								his.setsDate(d);
-								his.setsPrice(BigDecimal.valueOf(stockTranformVo.getTrade()));
-								stockPriceHistoryMapper.insert(his);
+								if (stockTranformVo.getOpen() != 0d) {//停牌的开盘价是0
+									StockPriceHistory his = new StockPriceHistory();
+									his.setsCode(stockTranformVo.getCode());
+									his.setsName(stockTranformVo.getName());
+									his.setsDate(d);
+									his.setsPrice(BigDecimal.valueOf(stockTranformVo.getTrade()));
+									stockPriceHistoryMapper.insert(his);
+								}
 							}
 						} catch (Exception e) {
 							faultCount++;
