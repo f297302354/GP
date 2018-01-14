@@ -39,8 +39,8 @@ public class StockYesTest {
 		StockYesParam param = new StockYesParam();
 		param.setDate("2018-01-12");
 		param.setDiffVal(0.03d);
-		param.setDownAvgDay(318);
-		param.setHavdAvgDay(318);
+		param.setDownAvgDay(453);
+		param.setHavdAvgDay(453);
 		param.setCalculdateFlag("==");
 		boolean result = stockYesService.execYes(param);
 		long end = System.currentTimeMillis();

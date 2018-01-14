@@ -47,7 +47,7 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 	/**
 	 * 根据股票表中的内容查询当前这个股票的一段时间的历史数据，只执行一次
 	 */
-	@SuppressWarnings("finally")
+	/*@SuppressWarnings("finally")
 	@Transactional
 	public boolean queryHistoryDataWithInsertDB(String start_date, String end_date) {
 		boolean resultFlag = false;
@@ -87,6 +87,65 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 					}
 				}
 			}
+			resultFlag = true;
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				client.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return resultFlag;
+		}
+	}*/
+	
+	/**
+	 * 根据股票表中的内容查询当前这个股票的一段时间的历史数据，只执行一次
+	 */
+	@SuppressWarnings("finally")
+	@Transactional
+	public boolean queryHistoryDataWithInsertDB(String start_date, String end_date) {
+		boolean resultFlag = false;
+		CloseableHttpClient client = HttpClients.createDefault();
+//		String start_date = "20170501";
+//		String end_date = "20180109";
+		String url = "http://q.stock.sohu.com/hisHq?code=cn_$stock_code&start="+start_date+"&end="+end_date+"&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp&r=0.8391495715053367&0.9677250558488026";
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			List<StockInfo> selectAll = stockInfoService.selectAll();
+			List<StockPriceHistory> parpareInsertList = new ArrayList<StockPriceHistory>();
+			for (int i = 0; i < selectAll.size(); i++) {
+				System.out.println("----------------  " + i);
+				StockInfo stockInfo = selectAll.get(i);
+				HttpGet get = new HttpGet(url.replace(STOCK_CODE, stockInfo.getsCode()));
+				CloseableHttpResponse resp = client.execute(get);
+				HttpEntity entity = resp.getEntity();
+				String result = EntityUtils.toString(entity);
+				String[] dataArr = null;
+				try {
+					dataArr = this.stringDataTransformArray(result);
+				} catch (Exception e) {
+					continue;
+				}
+				for (int j = 0; j < dataArr.length; j++) {
+					try {
+						String[] everyDatas = dataArr[j].split(",");
+						String everyDate = everyDatas[0];//日期
+						String everyPrice = everyDatas[2];//收盘价
+						StockPriceHistory his = new StockPriceHistory();
+						his.setsCode(stockInfo.getsCode());
+						his.setsName(stockInfo.getsName());
+						his.setsDate(format.parse(everyDate));
+						his.setsPrice(BigDecimal.valueOf(Double.valueOf(everyPrice)));
+						parpareInsertList.add(his);
+//						stockPriceHistoryMapper.insert(his);
+					} catch (Exception e) {
+						continue;
+					}
+				}
+			}
+			this.batchInsert(parpareInsertList);
 			resultFlag = true;
 		} catch (Exception e) {
 			System.err.println(e.getMessage());

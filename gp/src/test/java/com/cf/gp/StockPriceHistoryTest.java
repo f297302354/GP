@@ -40,14 +40,15 @@ public class StockPriceHistoryTest {
 	/**
 	 * 区间数据
 	 */
-//	@Test
+	@Test
 	public void queryInfoWithInsertDB() {
 		//第一次 exec time = 43536 - 59466条记录
 		//第二次 exec time = 373330 - 527369条记录 （20170501 - 20180109）
 		//第三次 exec time = 514094 - 650525条记录 （20160501 - 20170430）
+		//第四次 exec time = 90622 - 196027条记录 （20160101 - 20160430）
 		long start = System.currentTimeMillis();
 		StockPriceHistoryService stockPriceHistoryService = (StockPriceHistoryService)app.getBean("stockPriceHistoryService");
-		boolean result = stockPriceHistoryService.queryHistoryDataWithInsertDB("20180110", "20180111");
+		boolean result = stockPriceHistoryService.queryHistoryDataWithInsertDB("20160101", "20160430");
 		long end = System.currentTimeMillis();
 		System.out.println(result);
 		System.out.println("exec time = " + String.valueOf(end - start));
@@ -68,7 +69,7 @@ public class StockPriceHistoryTest {
 		System.out.println("exec time = " + String.valueOf(end - start));
 	}
 	
-	@Test
+//	@Test
 	public void queryDataWithInsertDBq() {
 		StockPriceHistoryService stockPriceHistoryService = (StockPriceHistoryService)app.getBean("stockPriceHistoryService");
 		List<StockPriceHistory> queryOneDayDataByDate = stockPriceHistoryService.queryOneDayDataByDate("2018-01-12");
