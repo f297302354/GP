@@ -160,10 +160,48 @@
 		]]>
 	</select>
 	
+	<select id="queryAvgValAndCount" resultType="com.cf.gp.model.StockPriceHistoryResultCondition" parameterType="com.cf.gp.model.StockPriceHistoryParamVo">
+		<![CDATA[
+			SELECT
+				count(*) count, avg(t.val) val
+			FROM
+				(
+					SELECT
+						t.S_PRICE val
+					FROM
+						t_stock_price_history t
+					WHERE
+						t.S_CODE = #{code}
+					AND t.S_DATE <= #{date}
+					ORDER BY
+						t.S_DATE DESC
+					LIMIT 0,
+					#{dayAvg}
+				) t
+		]]>
+	</select>
+	
 	<select id="selectByDate" resultMap="BaseResultMap" parameterType="com.cf.gp.model.StockPriceHistoryParamVo">
 		select
 		<include refid="Base_Column_List" />
 		from t_stock_price_history
 		where S_DATE = #{date} and S_CODE = #{code}
+	</select>
+	
+	<insert id="batchInsert" parameterType="list">
+		insert into t_stock_price_history (S_NAME, S_CODE,
+		S_DATE, S_PRICE)
+		values 
+		<foreach collection="list" separator="," item="single">
+			(#{single.sName,jdbcType=VARCHAR},
+		#{single.sCode,jdbcType=VARCHAR},
+		#{single.sDate,jdbcType=DATE},
+		#{single.sPrice,jdbcType=DECIMAL})
+		</foreach>
+	</insert>
+	
+<!-- 	暂时不考虑创业板 -->
+	<select id="queryOneDayDataByDate" resultMap="BaseResultMap" parameterType="string">
+		SELECT S_NAME, S_CODE, S_PRICE from t_stock_price_history where S_DATE = #{date} and substr(S_CODE,1,3) != '300'
 	</select>
 </mapper>

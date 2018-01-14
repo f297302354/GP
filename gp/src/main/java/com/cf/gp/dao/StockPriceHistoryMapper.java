@@ -1,7 +1,10 @@
 package com.cf.gp.dao;
 
+import java.util.List;
+
 import com.cf.gp.model.StockPriceHistory;
 import com.cf.gp.model.StockPriceHistoryParamVo;
+import com.cf.gp.model.StockPriceHistoryResultCondition;
 
 public interface StockPriceHistoryMapper {
     /**
@@ -57,5 +60,11 @@ public interface StockPriceHistoryMapper {
     int queryAvgValueCount(StockPriceHistoryParamVo vo);
     
     StockPriceHistory selectByDate(StockPriceHistoryParamVo vo);
+
+	StockPriceHistoryResultCondition queryAvgValAndCount(StockPriceHistoryParamVo vo);
+
+	void batchInsert(List<StockPriceHistory> subList);
+
+	List<StockPriceHistory> queryOneDayDataByDate(String date);
     
 }

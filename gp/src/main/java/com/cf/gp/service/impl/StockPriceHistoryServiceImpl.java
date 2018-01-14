@@ -3,6 +3,7 @@ package com.cf.gp.service.impl;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import com.cf.gp.dao.StockPriceHistoryMapper;
 import com.cf.gp.model.StockInfo;
 import com.cf.gp.model.StockPriceHistory;
 import com.cf.gp.model.StockPriceHistoryParamVo;
+import com.cf.gp.model.StockPriceHistoryResultCondition;
 import com.cf.gp.model.StockTranformVo;
 import com.cf.gp.service.StockInfoService;
 import com.cf.gp.service.StockPriceHistoryService;
@@ -39,6 +41,8 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 	private static final String START_PAGE_FLAG = "$start_page";
 	
 	private static final int fault_Count = 3;//失败重试3次
+	
+	private static final int batch_count = 1000;//批量以1000次为单位插入
 	
 	/**
 	 * 根据股票表中的内容查询当前这个股票的一段时间的历史数据，只执行一次
@@ -175,6 +179,52 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 	@Override
 	public int queryAvgValueCount(StockPriceHistoryParamVo vo) {
 		return stockPriceHistoryMapper.queryAvgValueCount(vo);
+	}
+
+	@Override
+	public StockPriceHistoryResultCondition queryAvgValAndCount(StockPriceHistoryParamVo vo) {
+		return stockPriceHistoryMapper.queryAvgValAndCount(vo);
+	}
+
+	@Override
+	@Transactional
+	public void batchInsert(List<StockPriceHistory> datas) {
+		List<List<StockPriceHistory>> lists = this.transformBigListToSmallList(datas);
+		for (int i = 0, size = lists.size(); i < size; i++) {
+			List<StockPriceHistory> subList = lists.get(i);
+			stockPriceHistoryMapper.batchInsert(subList);
+		}
+	}
+	
+	private List<List<StockPriceHistory>> transformBigListToSmallList(List<StockPriceHistory> bigList) {
+		int size = bigList.size();
+		int subCount = size > batch_count ? ((size%1000)>0?1:0) + (size/1000) : 1;
+		List<List<StockPriceHistory>> resultList = new ArrayList<List<StockPriceHistory>>();
+		List<StockPriceHistory> subList = null;
+		for (int i = 0; i < subCount; i++) {
+			subList = new ArrayList<StockPriceHistory>();
+			for (int j = i*batch_count, k = (i+1)*batch_count>size?size:(i+1)*batch_count; j < k; j++) {
+				subList.add(bigList.get(j));
+			}
+			resultList.add(subList);
+		}
+		return resultList;
+	}
+	
+	public static void main(String[] args) {
+		int size = 36;
+		int c = size > 10 ? ((size%10)>0?1:0) + (size/10) : 1;
+		for (int i = 0; i < c; i++) {
+			for (int j = i*10, k=(i+1)*10>size?size:(i+1)*10; j < k; j++) {
+				System.out.println(" i = " + i + " , j = " + j);
+			}
+		}
+		
+	}
+
+	@Override
+	public List<StockPriceHistory> queryOneDayDataByDate(String date) {
+		return stockPriceHistoryMapper.queryOneDayDataByDate(date);
 	}
 
 }

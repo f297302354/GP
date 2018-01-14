@@ -1,9 +1,12 @@
 package com.cf.gp;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.cf.gp.model.StockPriceHistory;
 import com.cf.gp.service.StockPriceHistoryService;
 
 /**
@@ -53,7 +56,7 @@ public class StockPriceHistoryTest {
 	/**
 	 * 实时数据 - 新浪的请求多了会封IP
 	 */
-	@Test
+//	@Test
 	public void queryDataWithInsertDB() {
 		//第一次 exec time = 31160 - 3411条记录 （30多次http）
 		//第二次 exec time = 40016 - 3410条记录 （30多次http） 36页  38次请求 - 2018-01-11
@@ -63,6 +66,13 @@ public class StockPriceHistoryTest {
 		long end = System.currentTimeMillis();
 		System.out.println(result);
 		System.out.println("exec time = " + String.valueOf(end - start));
+	}
+	
+	@Test
+	public void queryDataWithInsertDBq() {
+		StockPriceHistoryService stockPriceHistoryService = (StockPriceHistoryService)app.getBean("stockPriceHistoryService");
+		List<StockPriceHistory> queryOneDayDataByDate = stockPriceHistoryService.queryOneDayDataByDate("2018-01-12");
+		System.out.println(queryOneDayDataByDate.size());
 	}
 	
 }
