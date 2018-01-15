@@ -173,6 +173,7 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 		CloseableHttpClient client = HttpClients.createDefault();
 		Date d = new Date();
 		try {
+			List<StockPriceHistory> parpareInsertList = new ArrayList<StockPriceHistory>();
 			while (exeFlag) {
 				HttpGet get = new HttpGet(url.replace(START_PAGE_FLAG, String.valueOf(startPage)));
 				CloseableHttpResponse resp = client.execute(get);
@@ -193,7 +194,8 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 									his.setsName(stockTranformVo.getName());
 									his.setsDate(d);
 									his.setsPrice(BigDecimal.valueOf(stockTranformVo.getTrade()));
-									stockPriceHistoryMapper.insert(his);
+									parpareInsertList.add(his);
+//									stockPriceHistoryMapper.insert(his);
 								}
 							}
 						} catch (Exception e) {
@@ -207,6 +209,7 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 				System.out.println(">>>>>>>>>>>>>>>>>>>>>    " + startPage);
 				System.out.println(result);
 			}
+			this.batchInsert(parpareInsertList);
 			resultFlag = true;
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
