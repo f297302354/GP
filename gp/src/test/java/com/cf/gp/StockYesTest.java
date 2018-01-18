@@ -37,11 +37,15 @@ public class StockYesTest {
 		long start = System.currentTimeMillis();
 		StockYesService stockYesService = (StockYesService)app.getBean("stockYesService");
 		StockYesParam param = new StockYesParam();
-		param.setDate("2018-01-12");
+		param.setDate("2018-01-18");
 		param.setDiffVal(0.03d);
-		param.setDownAvgDay(453);
-		param.setHavdAvgDay(453);
+		param.setDownAvgDay(25);
+//		param.setUpAvgDay(99);
+		param.setHavdAvgDay(165);
+//		param.setCalculdateFlag("<>");
 		param.setCalculdateFlag("==");
+		param.setPriceGTOpen(false);//true是算所有线，false只算阴线
+		param.setCalLow(false);//false不用最低价计算
 		boolean result = stockYesService.execYes(param);
 		long end = System.currentTimeMillis();
 		System.out.println(result);

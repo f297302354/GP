@@ -132,12 +132,18 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 					try {
 						String[] everyDatas = dataArr[j].split(",");
 						String everyDate = everyDatas[0];//日期
+						String everyOpen = everyDatas[1];//开盘价
 						String everyPrice = everyDatas[2];//收盘价
+						String everyLow = everyDatas[5];//最低价
+						String everyHigh = everyDatas[6];//最高价
 						StockPriceHistory his = new StockPriceHistory();
 						his.setsCode(stockInfo.getsCode());
 						his.setsName(stockInfo.getsName());
 						his.setsDate(format.parse(everyDate));
 						his.setsPrice(BigDecimal.valueOf(Double.valueOf(everyPrice)));
+						his.setsOpen(BigDecimal.valueOf(Double.valueOf(everyOpen)));
+						his.setsHigh(BigDecimal.valueOf(Double.valueOf(everyHigh)));
+						his.setsLow(BigDecimal.valueOf(Double.valueOf(everyLow)));
 						parpareInsertList.add(his);
 //						stockPriceHistoryMapper.insert(his);
 					} catch (Exception e) {
@@ -194,6 +200,9 @@ public class StockPriceHistoryServiceImpl implements StockPriceHistoryService {
 									his.setsName(stockTranformVo.getName());
 									his.setsDate(d);
 									his.setsPrice(BigDecimal.valueOf(stockTranformVo.getTrade()));
+									his.setsOpen(BigDecimal.valueOf(stockTranformVo.getOpen()));
+									his.setsHigh(BigDecimal.valueOf(stockTranformVo.getHigh()));
+									his.setsLow(BigDecimal.valueOf(stockTranformVo.getLow()));
 									parpareInsertList.add(his);
 //									stockPriceHistoryMapper.insert(his);
 								}

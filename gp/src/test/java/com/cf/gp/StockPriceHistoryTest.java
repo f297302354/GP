@@ -40,15 +40,20 @@ public class StockPriceHistoryTest {
 	/**
 	 * 区间数据
 	 */
-	@Test
+//	@Test
 	public void queryInfoWithInsertDB() {
 		//第一次 exec time = 43536 - 59466条记录
 		//第二次 exec time = 373330 - 527369条记录 （20170501 - 20180109）
 		//第三次 exec time = 514094 - 650525条记录 （20160501 - 20170430）
 		//第四次 exec time = 90622 - 196027条记录 （20160101 - 20160430）
+		
+		//改表结构后
+		//第一次 exec time = 87141 - 196027条记录 （20160101 - 20160430）
+		//第二次 exec time = 232306 - 650525条记录 （20160501 - 20170430）
+		//第三次 exec time = 154648 - 527369条记录 （20170501 - 20180117）
 		long start = System.currentTimeMillis();
 		StockPriceHistoryService stockPriceHistoryService = (StockPriceHistoryService)app.getBean("stockPriceHistoryService");
-		boolean result = stockPriceHistoryService.queryHistoryDataWithInsertDB("20160101", "20160430");
+		boolean result = stockPriceHistoryService.queryHistoryDataWithInsertDB("20170501", "20180117");
 		long end = System.currentTimeMillis();
 		System.out.println(result);
 		System.out.println("exec time = " + String.valueOf(end - start));
@@ -57,10 +62,13 @@ public class StockPriceHistoryTest {
 	/**
 	 * 实时数据 - 新浪的请求多了会封IP
 	 */
-//	@Test
+	@Test
 	public void queryDataWithInsertDB() {
 		//第一次 exec time = 31160 - 3411条记录 （30多次http）
 		//第二次 exec time = 40016 - 3410条记录 （30多次http） 36页  38次请求 - 2018-01-11
+		
+		//改表结构后
+		//第一次 exec time = 31160 - 3411条记录 （30多次http）
 		long start = System.currentTimeMillis();
 		StockPriceHistoryService stockPriceHistoryService = (StockPriceHistoryService)app.getBean("stockPriceHistoryService");
 		boolean result = stockPriceHistoryService.queryDataWithInsertDB();

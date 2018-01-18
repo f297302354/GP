@@ -33,6 +33,10 @@ public class StockYesParam {
 	
 	private Date currentDate;
 	
+	private boolean priceGTOpen = true;//true是算所有线，false只算阴线
+	
+	private boolean calLow = false;//是否按最低价来计算，如果这个属性为true，那么就不会计算收盘价的价格了，并且没有区间以及两均线或者都符合的计算逻辑了
+	
 	/**
 	 * 如果是两个值得情况下，当前字段为计算两个值得规则
 	 * <>是计算两个值得区间中间值，也就是符合>=downVal 并且 <=upVal
@@ -100,6 +104,22 @@ public class StockYesParam {
 
 	public void setCalculdateFlag(String calculdateFlag) {
 		this.calculdateFlag = calculdateFlag;
+	}
+
+	public boolean isPriceGTOpen() {
+		return priceGTOpen;
+	}
+
+	public void setPriceGTOpen(boolean priceGTOpen) {
+		this.priceGTOpen = priceGTOpen;
+	}
+
+	public boolean isCalLow() {
+		return calLow;
+	}
+
+	public void setCalLow(boolean calLow) {
+		this.calLow = calLow;
 	}
 
 }

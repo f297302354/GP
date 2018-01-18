@@ -52,6 +52,11 @@ public class StockPriceHistory {
      *
      * @mbggenerated Tue Jan 09 14:17:07 CST 2018
      */
+    
+    private BigDecimal sOpen;
+    private BigDecimal sHigh;
+    private BigDecimal sLow;
+    
     public Integer getId() {
         return id;
     }
@@ -163,4 +168,29 @@ public class StockPriceHistory {
     public void setsPrice(BigDecimal sPrice) {
         this.sPrice = sPrice;
     }
+
+	public BigDecimal getsOpen() {
+		return sOpen;
+	}
+
+	public void setsOpen(BigDecimal sOpen) {
+		this.sOpen = sOpen;
+	}
+
+	public BigDecimal getsHigh() {
+		return sHigh;
+	}
+
+	public void setsHigh(BigDecimal sHigh) {
+		this.sHigh = sHigh;
+	}
+
+	public BigDecimal getsLow() {
+		return sLow;
+	}
+
+	public void setsLow(BigDecimal sLow) {
+		this.sLow = sLow;
+	}
+
 }

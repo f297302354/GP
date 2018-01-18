@@ -159,52 +159,114 @@ public class StockYesServiceImpl implements StockYesService {
 		try {
 			List<StockPriceHistory> selectAll = stockPriceHistoryService.queryOneDayDataByDate(vo.getDate());
 			StockPriceHistoryParamVo param = null;
-			for (int i = 0; i < selectAll.size(); i++) {
-				StockPriceHistory stockInfo = selectAll.get(i);
-				if (stockInfo.getsName().indexOf(ST_CODE) == -1) {//ST暂时不考虑，创业板的sql中暂时已经过滤了
-					try {
-						param = new StockPriceHistoryParamVo();
-						param.setCode(stockInfo.getsCode());
-						param.setDate(vo.getDate());
-						param.setDayAvg(vo.getHavdAvgDay());
-						StockPriceHistoryResultCondition avgValAndCount = stockPriceHistoryService.queryAvgValAndCount(param);
-						if (avgValAndCount.getCount() == vo.getHavdAvgDay()) {
-							Integer downAvgDay = vo.getDownAvgDay();
-							Integer upAvgDay = vo.getUpAvgDay();
-							double downVal = avgValAndCount.getVal();
-							if (downAvgDay.intValue() != vo.getHavdAvgDay()) {
-								param.setDayAvg(downAvgDay);
-								downVal = stockPriceHistoryService.queryAvgValue(param);
-							}
-							double currentVal = stockInfo.getsPrice().doubleValue();
-							boolean isInsert = false;
-							if (upAvgDay == null) {
+			boolean calLow = vo.isCalLow();
+			boolean priceGTOpen = vo.isPriceGTOpen();
+			if (calLow) {
+				for (int i = 0; i < selectAll.size(); i++) {
+					StockPriceHistory stockInfo = selectAll.get(i);
+					if (stockInfo.getsName().indexOf(ST_CODE) == -1) {//ST暂时不考虑，创业板的sql中暂时已经过滤了
+						try {
+							param = new StockPriceHistoryParamVo();
+							param.setCode(stockInfo.getsCode());
+							param.setDate(vo.getDate());
+							param.setDayAvg(vo.getHavdAvgDay());
+							StockPriceHistoryResultCondition avgValAndCount = stockPriceHistoryService.queryAvgValAndCount(param);
+							if (avgValAndCount.getCount() == vo.getHavdAvgDay()) {
+								Integer downAvgDay = vo.getDownAvgDay();
+								double downVal = avgValAndCount.getVal();
+								if (downAvgDay.intValue() != vo.getHavdAvgDay()) {
+									param.setDayAvg(downAvgDay);
+									downVal = stockPriceHistoryService.queryAvgValue(param);
+								}
+								double currentVal = stockInfo.getsLow().doubleValue();
+								double openVal = stockInfo.getsOpen().doubleValue();
+								boolean isInsert = false;
 								if (currentVal >= downVal && currentVal <= (downVal + vo.getDiffVal())) {
 									isInsert = true;
 								}
-							} else {
-								param.setDayAvg(upAvgDay);
-								double upVal = stockPriceHistoryService.queryAvgValue(param);
-								if (CALCULATE_AND_FLAG.equals(vo.getCalculdateFlag())) {// <> 算区间
-									if (currentVal >= downVal && currentVal <= upVal) {
-										isInsert = true;
-									}
-								} else {// == 算两个值得都符合情况
-									if ((currentVal >= downVal && currentVal <= (downVal + vo.getDiffVal())) ||  (currentVal >= upVal && currentVal <= (upVal + vo.getDiffVal()))) {
-										isInsert = true;
+								if (isInsert) {
+									if (priceGTOpen) {//所有线
+										StockYes y = new StockYes();
+										y.setsCode(stockInfo.getsCode());
+										y.setsName(stockInfo.getsName());
+										y.setsDate(vo.getCurrentDate());
+										stockYesMapper.insert(y);
+									} else {//阴线
+										double compareVal = stockInfo.getsPrice().doubleValue();
+										if (openVal > compareVal) {
+											StockYes y = new StockYes();
+											y.setsCode(stockInfo.getsCode());
+											y.setsName(stockInfo.getsName());
+											y.setsDate(vo.getCurrentDate());
+											stockYesMapper.insert(y);
+										}
 									}
 								}
 							}
-							if (isInsert) {
-								StockYes y = new StockYes();
-								y.setsCode(stockInfo.getsCode());
-								y.setsName(stockInfo.getsName());
-								y.setsDate(vo.getCurrentDate());
-								stockYesMapper.insert(y);
-							}
+						} catch (Exception e) {
+							continue;
 						}
-					} catch (Exception e) {
-						continue;
+					}
+				}
+			} else {
+				for (int i = 0; i < selectAll.size(); i++) {
+					StockPriceHistory stockInfo = selectAll.get(i);
+					if (stockInfo.getsName().indexOf(ST_CODE) == -1) {//ST暂时不考虑，创业板的sql中暂时已经过滤了
+						try {
+							param = new StockPriceHistoryParamVo();
+							param.setCode(stockInfo.getsCode());
+							param.setDate(vo.getDate());
+							param.setDayAvg(vo.getHavdAvgDay());
+							StockPriceHistoryResultCondition avgValAndCount = stockPriceHistoryService.queryAvgValAndCount(param);
+							double currentVal = stockInfo.getsPrice().doubleValue();
+							if (avgValAndCount.getCount() == vo.getHavdAvgDay()) {
+								Integer downAvgDay = vo.getDownAvgDay();
+								Integer upAvgDay = vo.getUpAvgDay();
+								double downVal = avgValAndCount.getVal();
+								if (downAvgDay.intValue() != vo.getHavdAvgDay()) {
+									param.setDayAvg(downAvgDay);
+									downVal = stockPriceHistoryService.queryAvgValue(param);
+								}
+								boolean isInsert = false;
+								if (upAvgDay == null) {
+									if (currentVal >= downVal && currentVal <= (downVal + vo.getDiffVal())) {
+										isInsert = true;
+									}
+								} else {
+									param.setDayAvg(upAvgDay);
+									double upVal = stockPriceHistoryService.queryAvgValue(param);
+									if (CALCULATE_AND_FLAG.equals(vo.getCalculdateFlag())) {// <> 算区间
+										if (currentVal >= downVal && currentVal <= upVal) {
+											isInsert = true;
+										}
+									} else {// == 算两个值得都符合情况
+										if ((currentVal >= downVal && currentVal <= (downVal + vo.getDiffVal())) ||  (currentVal >= upVal && currentVal <= (upVal + vo.getDiffVal()))) {
+											isInsert = true;
+										}
+									}
+								}
+								if (isInsert) {
+									double openVal = stockInfo.getsOpen().doubleValue();
+									if (priceGTOpen) {//所有线
+										StockYes y = new StockYes();
+										y.setsCode(stockInfo.getsCode());
+										y.setsName(stockInfo.getsName());
+										y.setsDate(vo.getCurrentDate());
+										stockYesMapper.insert(y);
+									} else {//阴线
+										if (openVal > currentVal) {
+											StockYes y = new StockYes();
+											y.setsCode(stockInfo.getsCode());
+											y.setsName(stockInfo.getsName());
+											y.setsDate(vo.getCurrentDate());
+											stockYesMapper.insert(y);
+										}
+									}
+								}
+							}
+						} catch (Exception e) {
+							continue;
+						}
 					}
 				}
 			}
